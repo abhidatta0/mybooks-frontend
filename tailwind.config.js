@@ -10,6 +10,8 @@ export default {
       'sans':'Kanit, Arial, sans-serif',
     },
   },
-  plugins: [],
+  plugins: [
+    require('daisyui'),
+  ],
 }
 

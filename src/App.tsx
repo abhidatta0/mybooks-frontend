@@ -1,14 +1,13 @@
 import {QueryClientProvider, QueryClient} from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import Login from '@/features/Auth/Login/page';
 
 const queryClient = new QueryClient()
 const App = ()=> {
 
   return (
     <QueryClientProvider client={queryClient}>
-    <div className="text-3xl font-bold underline">
-      Hello App
-    </div>
+      <Login />
     <ReactQueryDevtools />
     </QueryClientProvider>
   )
