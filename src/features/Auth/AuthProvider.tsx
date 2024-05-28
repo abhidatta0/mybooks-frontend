@@ -7,7 +7,6 @@ import { cleartoken, gettoken, savetoken } from '@/libs/localstorage/tokens';
 import { fetcherPost } from '@/libs/api/axiosFetcher';
 import domains from '@/libs/api/domains';
 
-console.log(domains);
 const UserLoginApi = `${domains.APP_BACKEND}/users/login`;
 
 type AuthContextType = {
