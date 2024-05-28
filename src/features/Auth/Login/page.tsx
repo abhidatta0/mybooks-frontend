@@ -1,11 +1,31 @@
 import Constants from '@/constants/app';
+import {useForm} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
 import { useAuth } from '../AuthProvider';
+import z from 'zod';
+
+const schema = z.object({
+    email: z.string().email({ message: 'Invalid email address' }),
+    password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+});
+
+type LoginFormInputs = z.infer<typeof schema>;
 
 const Login = ()=>{
     const {loginUser} = useAuth();
-    const handleLogin = ()=>{
-        loginUser({email: "abhidatta159@gmail.com", password: "123366666jj"});
-    }
+
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>({
+        resolver: zodResolver(schema),
+    });
+
+    const onSubmit = async (data: LoginFormInputs) => {
+        try {
+            await loginUser(data);
+        } catch (err) {
+            console.error('Login failed', err);
+        }
+    };
+    
     return <div className="flex bg-white p-2 w-full h-screen">
         <div className="w-2/5 rounded-tl-2xl rounded-bl-2xl relative bg-[url('@/assets/login.jpg')] bg-cover">
            <div className='absolute bottom-9 left-4'>
@@ -20,13 +40,18 @@ const Login = ()=>{
                 <div className="space-y-5 w-full">
                 <div className="flex flex-col">
                 <label className="text-sm">Email</label>
-                <input type="email" placeholder="name@email.com" className="input input-bordered w-full" />
+                <input type="email" placeholder="name@email.com" className="input input-bordered w-full" 
+                {...register('email')}/>
+                {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
                 </div>
                 <div className="flex flex-col">
                 <label className="text-sm">Password</label>
-                <input type="text" placeholder="******" className="input input-bordered w-full" />
+                <input type="text" placeholder="********" className="input input-bordered w-full" 
+                {...register('password')}
+                />
+                {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
                 </div>
-                <button className="btn btn-primary w-full" onClick={handleLogin}>Login</button>
+                <button className="btn btn-primary w-full" onClick={handleSubmit(onSubmit)}>Login</button>
                 </div>
             </div>
         </div>
