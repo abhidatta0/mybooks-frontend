@@ -2,6 +2,7 @@ import { PropsWithChildren, createContext, useContext, useEffect, useState } fro
 import {  LoginUserObject, LoginRequest, LoginResponse } from './Login/types';
 import { clearLoginData, getLoginData, saveLoginData } from '@/libs/localstorage/user';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import { cleartoken, gettoken, savetoken } from '@/libs/localstorage/tokens';
 import { fetcherPost } from '@/libs/api/axiosFetcher';
 import domains from '@/libs/api/domains';
@@ -39,16 +40,16 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const loginUser = async (loginRequest: LoginRequest, fromLocation?: Location) => {
     const response = await fetcherPost({ url: UserLoginApi, data: loginRequest });
-    console.log(response);
     const loginData: LoginResponse = response.data;
+    const accessToken = Cookies.get("access-token") ?? '';
     if (loginData) {
       // saving to local storage
-    //   savetoken({ accessToken: loginData.accessToken })
+      savetoken({ accessToken:accessToken })
       saveLoginData(loginData.user);
 
       // saving in context state
       setUser(loginData.user);
-    //   setAccesssToken(loginData.accessToken);
+      setAccesssToken(accessToken);
       navigate(fromLocation || '/',{replace:true})
     }
   }
