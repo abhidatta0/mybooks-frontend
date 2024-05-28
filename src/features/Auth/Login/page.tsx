@@ -1,8 +1,9 @@
 import Constants from '@/constants/app';
-import {useForm} from 'react-hook-form';
+import {useForm, Controller} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import { useAuth } from '../AuthProvider';
 import z from 'zod';
+import Input from '@/components/hook-forms/Input';
 
 const schema = z.object({
     email: z.string().email({ message: 'Invalid email address' }),
@@ -14,7 +15,7 @@ type LoginFormInputs = z.infer<typeof schema>;
 const Login = ()=>{
     const {loginUser} = useAuth();
 
-    const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>({
+    const { control, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>({
         resolver: zodResolver(schema),
     });
 
@@ -38,20 +39,35 @@ const Login = ()=>{
                 <p className="text-2xl">Welcome Back to {Constants.APP_NAME}</p>
                 <p>Please Login</p>
                 <div className="space-y-5 w-full">
-                <div className="flex flex-col">
-                <label className="text-sm">Email</label>
-                <input type="email" placeholder="name@email.com" className="input input-bordered w-full" 
-                {...register('email')}/>
-                {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
-                </div>
-                <div className="flex flex-col">
-                <label className="text-sm">Password</label>
-                <input type="text" placeholder="********" className="input input-bordered w-full" 
-                {...register('password')}
-                />
-                {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
-                </div>
-                <button className="btn btn-primary w-full" onClick={handleSubmit(onSubmit)}>Login</button>
+                    <Controller
+                        name="email"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                label="Email"
+                                type="email"
+                                placeholder="name@email.com"
+                                value={field.value || ''}
+                                onChange={field.onChange}
+                                error={errors.email?.message}
+                            />
+                        )}
+                    />
+                    <Controller
+                        name="password"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                label="Password"
+                                type="password"
+                                placeholder="********"
+                                value={field.value || ''}
+                                onChange={field.onChange}
+                                error={errors.password?.message}
+                            />
+                        )}
+                    />
+                    <button className="btn btn-primary w-full" onClick={handleSubmit(onSubmit)}>Login</button>
                 </div>
             </div>
         </div>
