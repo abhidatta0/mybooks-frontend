@@ -1,4 +1,5 @@
 import  axios,{ Method , AxiosRequestHeaders} from "axios";
+import Cookies from 'js-cookie';
 import { gettoken } from "../localstorage/tokens";
 
 type FetcherPayload = {
@@ -22,6 +23,7 @@ const axiosFetcher = async (payload: FetcherPayloadWithMethod)=> {
     if(tokendata){
         accessToken = tokendata.accessToken;
     }
+    Cookies.set("access-token",accessToken ?? '',{secure:true});
     return axiosPrivate({...payload, headers:{
      'Authorization': payload.headers?.Authorization ?? `Bearer ${accessToken}`,
      ...payload.headers,
