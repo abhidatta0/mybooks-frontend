@@ -1,4 +1,5 @@
 export type Book = {
+    id: number;
     title: string;
     description: string|null;
     total_number_of_pages: number;
