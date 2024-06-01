@@ -3,12 +3,17 @@ import Logo from '@/assets/book-bookmark.svg';
 import { TiChevronLeftOutline } from "react-icons/ti";
 import { TiChevronRight } from "react-icons/ti";
 import Constants from '@/constants/app';
+import { useAuth } from '@/features/Auth/AuthProvider';
+import { useAuthUser } from '@/features/Auth/useAuthUser';
 
 type Props = PropsWithChildren;
 const SidebarContext = createContext(false);
 
 const Sidebar = ({children}:Props)=>{
   const [expanded, setExpanded] = useState(true);
+  const {logout} = useAuth();
+  const {username} = useAuthUser();
+
   return (
     <aside className="h-screen">
       <nav className="h-full flex flex-col bg-white border-r shadown-sm">
@@ -23,7 +28,12 @@ const Sidebar = ({children}:Props)=>{
         </div>
 
         <SidebarContext.Provider value={expanded}>
-          <ul className='flex-1 px-3'>{children}</ul>
+          <div className='flex flex-1 flex-col px-3 mb-3 justify-between'>
+             <ul className=''>{children}</ul>
+             <div className="btn btn-outline" onClick={logout}>
+               Logout <p className='mr-2'>({username})</p>
+             </div>
+          </div>
         </SidebarContext.Provider>
       </nav>
     </aside>
