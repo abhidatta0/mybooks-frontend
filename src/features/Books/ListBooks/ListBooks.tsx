@@ -9,6 +9,12 @@ const ListBooks = ()=>{
    if(!books){
       return undefined;
    }
+   if(books.length === 0){
+      return <div className="text-center">
+         <p className="text-xl">Your Library is Empty!</p>
+         <p>It looks like you haven't added any books yet.</p>
+      </div>
+   }
    return books.map((book)=> <Book key={book.id} book={book}/>)
 }
 
