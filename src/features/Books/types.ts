@@ -17,3 +17,7 @@ export type GetAllBooksByUserIdRequest = {
 }
 
 export type GetAllBooksByUserIdResponse = Book[]
+
+export type EditBookRequest = Partial<Omit<CreateBookRequest, 'user_id'|'total_number_of_pages'>> & {
+    number_of_pages_read: Book['number_of_pages_read'];
+}

@@ -12,7 +12,7 @@ const YesNoPopup = (props:Props)=>{
        <h1 className="text-lg text-center">{props.headerText}</h1>
        <div className="flex place-content-end items-center gap-3">
           {
-            props.actions.map(({className,...rest})=>  <button className={`btn btn-sm ${className}`} key={rest.accessKey}  {...rest} />)
+            props.actions.map(({className,...rest},index)=>  <button className={`btn btn-sm ${className}`} key={index}  {...rest} />)
           }
        </div>
     </Modal>

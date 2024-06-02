@@ -33,5 +33,6 @@ const fetcherGet = (payload: FetcherPayload)=> axiosFetcher({method: 'GET', ...p
 const fetcherPost = (payload: FetcherPayload)=> axiosFetcher({method: 'POST', ...payload});
 const fetcherPut = (payload: FetcherPayload)=> axiosFetcher({method: 'PUT', ...payload});
 const fetcherDelete = (payload: FetcherPayload)=> axiosFetcher({method: 'DELETE', ...payload});
+const fetcherPatch = (payload: FetcherPayload)=> axiosFetcher({method: 'PATCH', ...payload});
 
-export {fetcherGet, fetcherPost, fetcherPut,fetcherDelete, axiosFetcher};
+export {fetcherGet, fetcherPost, fetcherPut,fetcherPatch, fetcherDelete, axiosFetcher};
