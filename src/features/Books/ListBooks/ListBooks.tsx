@@ -5,7 +5,6 @@ import Book from "./Book";
 const ListBooks = ()=>{
    const {id} = useAuthUser();
    const {data: books} = useGetBooks({user_id: id});
-   console.log(books);
    if(!books){
       return undefined;
    }

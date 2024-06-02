@@ -2,6 +2,8 @@ import {useForm, Controller} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import z from 'zod';
 import Input from '@/components/hook-forms/Input';
+import useAddBook from './useAddForm';
+import { useAuthUser } from '@/features/Auth/useAuthUser';
 
 const schema = z.object({
     title: z.string(),
@@ -11,13 +13,21 @@ const schema = z.object({
 
 type CreateFormInputs = z.infer<typeof schema>;
 
-const CreateBookForm = ()=>{
+type Props = {
+    handleClose: ()=> void;
+}
+const CreateBookForm = ({handleClose}: Props)=>{
+    const {id} = useAuthUser();
+    const {mutate: addBook} = useAddBook();
     const { control, handleSubmit, formState: { errors } } = useForm<CreateFormInputs>({
         resolver: zodResolver(schema),
     });
 
     const onSubmit  = (data: CreateFormInputs)=>{
         console.log(data);
+        addBook({...data, user_id:id}, {
+            onSuccess:handleClose
+        })
     }
    return <div>
     <p className='text-center text-xl'>Add a new book</p>

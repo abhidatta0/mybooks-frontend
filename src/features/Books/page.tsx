@@ -13,14 +13,14 @@ const Books = ()=>{
   return <div className="p-4">
     <p className="text-4xl">Happy reading,</p>
     <p className="text-4xl"> {username}</p>
-    <button className="btn my-3" onClick={()=> setShowModal(true)}>
+    <button className="btn btn-outline my-3" onClick={()=> setShowModal(true)}>
       <MdOutlineMenuBook size={30}/>
       <p className="text-base">Add new book </p>
     </button>
     <br />
     <ListBooks />
     {showModal && <Modal isVisible={showModal} onClose={()=> setShowModal(false)}>
-      <AddBookForm />
+      <AddBookForm  handleClose={()=> setShowModal(false)}/>
       </Modal>}
   </div>
 }
