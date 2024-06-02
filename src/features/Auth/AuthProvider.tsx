@@ -1,5 +1,5 @@
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
-import {  LoginUserObject, LoginRequest, LoginResponse } from './Login/types';
+import {  LoginUserObject, LoginRequest, LoginResponse, RegisterRequest } from './Login/types';
 import { clearLoginData, getLoginData, saveLoginData } from '@/libs/localstorage/user';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -8,11 +8,13 @@ import { fetcherPost } from '@/libs/api/axiosFetcher';
 import domains from '@/libs/api/domains';
 
 const UserLoginApi = `${domains.APP_BACKEND}/users/login`;
+const UserRegisterApi = `${domains.APP_BACKEND}/users`;
 
 type AuthContextType = {
   user: LoginUserObject | null;
   accesssToken: string | null,
   loginUser: (loginRequest: LoginRequest,fromLocation?:Location) => void;
+  registerUser: (registerRequest: RegisterRequest) => void;
   logout: () => void;
   isLoggedIn: () => boolean;
   setAccesssToken: (accesssToken: string)=> void;
@@ -66,7 +68,16 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     navigate('/login')
   }
 
-  return <AuthContext.Provider value={{ loginUser, user, accesssToken, isLoggedIn, logout, setAccesssToken }}>
+  const registerUser = async (registerRequest: RegisterRequest)=>{
+    const response = await fetcherPost({ url: UserRegisterApi, data: registerRequest });
+    const data = response.data;
+    console.log(data);
+    if(data.success){
+      navigate('/login');
+    }    
+  }
+
+  return <AuthContext.Provider value={{ loginUser, registerUser, user, accesssToken, isLoggedIn, logout, setAccesssToken }}>
     {isReady ? children : null}
   </AuthContext.Provider>
 }

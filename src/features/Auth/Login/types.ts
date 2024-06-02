@@ -14,3 +14,9 @@ export type LoginRequest = {
 export type LoginResponse = {
     user:LoginUserObject,
 }
+
+export type RegisterRequest = {
+    "username":string,
+    "password":string,
+    "email":string,
+}

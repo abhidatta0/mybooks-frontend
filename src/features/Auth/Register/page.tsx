@@ -7,25 +7,27 @@ import z from 'zod';
 import Input from '@/components/hook-forms/Input';
 
 const schema = z.object({
+    username: z.string().min(3,{ message: 'Password must be at least 3 characters' }),
     email: z.string().email({ message: 'Invalid email address' }),
     password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
 });
 
-type LoginFormInputs = z.infer<typeof schema>;
+type RegisterFormInputs = z.infer<typeof schema>;
 
-const Login = ()=>{
-    const {loginUser} = useAuth();
+const Register = ()=>{
+    const {registerUser} = useAuth();
     const navigate = useNavigate();
 
-    const { control, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>({
+    const { control, handleSubmit, formState: { errors } } = useForm<RegisterFormInputs>({
         resolver: zodResolver(schema),
     });
 
-    const onSubmit = async (data: LoginFormInputs) => {
+    const onSubmit = async (data: RegisterFormInputs) => {
+        console.log(data);
         try {
-            await loginUser(data);
+            await registerUser(data);
         } catch (err) {
-            console.error('Login failed', err);
+            console.error('Register failed', err);
         }
     };
     
@@ -38,9 +40,23 @@ const Login = ()=>{
         </div>
         <div className="flex justify-center w-3/5 pt-24">
             <div className="flex flex-col items-center">
-                <p className="text-2xl">Welcome Back to {Constants.APP_NAME}</p>
-                <p>Please Login</p>
+                <p className="text-2xl">Welcome to {Constants.APP_NAME}</p>
+                <p>Please Register</p>
                 <div className="space-y-5 w-full">
+                    <Controller
+                        name="username"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                label="Username"
+                                type="text"
+                                placeholder=""
+                                value={field.value || ''}
+                                onChange={field.onChange}
+                                error={errors.email?.message}
+                            />
+                        )}
+                    />
                     <Controller
                         name="email"
                         control={control}
@@ -69,15 +85,15 @@ const Login = ()=>{
                             />
                         )}
                     />
-                    <button className="btn btn-primary w-full" onClick={handleSubmit(onSubmit)}>Login</button>
+                    <button className="btn btn-primary w-full" onClick={handleSubmit(onSubmit)}>Lets start</button>
                 </div>
                 <div className='mt-10'>
-                    <p>Register first to create an account</p>
-                    <button className="btn  btn-outline w-full" onClick={()=> navigate('/register')}>Register</button>
+                    <p>Already have a account ?</p>
+                    <button className="btn  btn-outline w-full" onClick={()=> navigate('/login')}>Login</button>
                 </div>
             </div>
         </div>
     </div>
 }
 
-export default Login;
+export default Register;

@@ -4,6 +4,7 @@ import AuthProvider from '@/features/Auth/AuthProvider';
 import Home from '@/features/Home/page';
 import ProtectedRoute from "@/features/Auth/ProtectedRoute";
 import Books from "@/features/Books/page";
+import Register from "@/features/Auth/Register/page";
 
 const router = createBrowserRouter([
     {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
             {
                 path:'login',
                 element:<Login />
+            },
+            {
+                path:'register',
+                element:<Register />
             },
             {
                path:'/',
