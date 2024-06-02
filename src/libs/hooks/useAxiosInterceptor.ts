@@ -1,0 +1,28 @@
+
+import { useEffect} from 'react';
+import { toastError } from '@/libs/utils/toast';
+import { axiosPrivate } from '@/libs/api/axiosFetcher';
+import { useAuth } from '@/features/Auth/AuthProvider';
+
+const useAxiosInterceptor = ()=>{
+    const {accesssToken} = useAuth();
+
+    useEffect(()=>{
+        const responseInterceptor = axiosPrivate.interceptors.response.use(
+        response => response,
+        async (error)=>{
+            const errorMessage = error.response?.data?.message ||  'Something went wrong. Try again!';
+            toastError(errorMessage);
+            return Promise.reject(error);
+        }
+        );
+
+        // cleanup 
+        return ()=>{
+           axiosPrivate.interceptors.response.eject(responseInterceptor);
+        }
+        
+      },[accesssToken]);
+}
+
+export default useAxiosInterceptor;

@@ -40,20 +40,26 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const loginUser = async (loginRequest: LoginRequest, fromLocation?: Location) => {
-    const response = await fetcherPost({ url: UserLoginApi, data: loginRequest });
-    const loginData: LoginResponse = response.data;
-    console.log(Cookies.get("access-token"));
-    const accessToken = Cookies.get("access-token") ?? '';
-    if (loginData) {
-      // saving to local storage
-      savetoken({ accessToken:accessToken })
-      saveLoginData(loginData.user);
-
-      // saving in context state
-      setUser(loginData.user);
-      setAccesssToken(accessToken);
-      navigate(fromLocation || '/',{replace:true})
+    try{
+      const response = await fetcherPost({ url: UserLoginApi, data: loginRequest });
+      console.log(response);
+      const loginData: LoginResponse = response.data;
+      console.log(Cookies.get("access-token"));
+      const accessToken = Cookies.get("access-token") ?? '';
+      if (loginData) {
+        // saving to local storage
+        savetoken({ accessToken:accessToken })
+        saveLoginData(loginData.user);
+  
+        // saving in context state
+        setUser(loginData.user);
+        setAccesssToken(accessToken);
+        navigate(fromLocation || '/',{replace:true})
+      }
+    }catch(err){
+      console.error(err)
     }
+    
   }
 
   const isLoggedIn = () => {
