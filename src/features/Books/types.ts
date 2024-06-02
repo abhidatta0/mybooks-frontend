@@ -1,7 +1,7 @@
 export type Book = {
     id: number;
     title: string;
-    description: string|null;
+    description?: string;
     total_number_of_pages: number;
     number_of_pages_read: number;
     user_id: number;

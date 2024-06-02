@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Modal from "@/components/ui/Modal";
 import ListBooks from "./ListBooks/ListBooks";
 import {useAuthUser} from '@/features/Auth/useAuthUser';
-import CreateBookForm from "./CreateBook/CreateBookForm";
+import AddBookForm from "./AddBook/AddBookForm";
 
 const Books = ()=>{
   const [showModal, setShowModal] = useState(false);
@@ -20,7 +20,7 @@ const Books = ()=>{
     <br />
     <ListBooks />
     {showModal && <Modal isVisible={showModal} onClose={()=> setShowModal(false)}>
-      <CreateBookForm />
+      <AddBookForm />
       </Modal>}
   </div>
 }

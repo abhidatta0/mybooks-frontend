@@ -9,14 +9,12 @@ const schema = z.object({
     total_number_of_pages: z.number().min(1,{message:'Must be above 1'}),    
 });
 
-const CreateFormInputs = z.infer<typeof schema>;
+type CreateFormInputs = z.infer<typeof schema>;
 
 const CreateBookForm = ()=>{
-    const { control, handleSubmit, formState: { errors } } = useForm<typeof CreateFormInputs>({
+    const { control, handleSubmit, formState: { errors } } = useForm<CreateFormInputs>({
         resolver: zodResolver(schema),
     });
-
-    console.log({errors})
 
     const onSubmit  = (data: CreateFormInputs)=>{
         console.log(data);
@@ -61,13 +59,13 @@ const CreateBookForm = ()=>{
                 label="Total number of pages"
                 type="number"
                 placeholder="0"
-                value={field.value || ''}
+                value={field.value?.toString() || ''}
                 onChange={(event)=>field.onChange(event.target.valueAsNumber)}
                 error={errors.total_number_of_pages?.message}
             />
         )}
     />
-    <button className="btn btn-primary w-full" onClick={handleSubmit(onSubmit)}>Add</button>
+    <button className="btn btn-primary w-full" onClick={handleSubmit(onSubmit)}>Add Book Info</button>
     </div>
 
    </div>
