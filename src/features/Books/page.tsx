@@ -1,6 +1,6 @@
 import { MdOutlineMenuBook } from "react-icons/md";
 import { useState } from 'react';
-import Modal from "@/components/ui/Modal";
+import Modal from "@/components/ui/Modal/Modal";
 import ListBooks from "./ListBooks/ListBooks";
 import {useAuthUser} from '@/features/Auth/useAuthUser';
 import AddBookForm from "./AddBook/AddBookForm";
