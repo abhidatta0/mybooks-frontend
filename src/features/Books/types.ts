@@ -10,7 +10,7 @@ export type Book = {
 }
 
 
-export type CreateBookRequest = Omit<Book,'number_of_pages_read'|'created_at'|'updated_at'>;
+export type CreateBookRequest = Omit<Book,'id'|'number_of_pages_read'|'created_at'|'updated_at'>;
 
 export type GetAllBooksByUserIdRequest = {
     user_id: number;
