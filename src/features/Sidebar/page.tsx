@@ -1,6 +1,7 @@
 import { PropsWithChildren, useState, createContext, useContext } from 'react';
 import Logo from '@/assets/book-bookmark.svg';
 import { TiChevronLeftOutline } from "react-icons/ti";
+import { IoIosLogOut } from "react-icons/io";
 import { TiChevronRight } from "react-icons/ti";
 import Constants from '@/constants/app';
 import { useAuth } from '@/features/Auth/AuthProvider';
@@ -30,8 +31,8 @@ const Sidebar = ({children}:Props)=>{
         <SidebarContext.Provider value={expanded}>
           <div className='flex flex-1 flex-col px-3 mb-3 justify-between'>
              <ul className=''>{children}</ul>
-             <div className="btn btn-outline" onClick={logout}>
-               Logout <p className='mr-2'>({username})</p>
+             <div className={`btn btn-outline ${expanded ?'': 'btn-sm'}`} onClick={logout}>
+              {expanded ? "Logout" : <IoIosLogOut className='text-red-700' size={15}/>} {expanded ? <p className='mr-2'>({username})</p>: null}
              </div>
           </div>
         </SidebarContext.Provider>
