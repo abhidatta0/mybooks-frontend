@@ -10,7 +10,10 @@ const schema = z.object({
     description: z.string().optional(),
     total_number_of_pages: z.number().min(1,{message:'Must be above 1'}), 
     number_of_pages_read: z.number().min(1,{message:'Must be above 1'}),    
-});
+}).refine((val) => {return val.number_of_pages_read <= val.total_number_of_pages}, {
+    message: "Number of pages read should not be greater than total number of pages!",
+    path:['number_of_pages_read']
+  });
 
 type EditFormInputs = z.infer<typeof schema>;
 
@@ -80,7 +83,6 @@ const EditBookForm = ({handleClose, book}: Props)=>{
                 value={field.value?.toString() || ''}
                 onChange={(event)=>field.onChange(event.target.valueAsNumber)}
                 error={errors.total_number_of_pages?.message}
-                disabled
             />
         )}
     />
