@@ -7,6 +7,7 @@ export type Book = {
     user_id: number;
     created_at: string;
     updated_at: string;
+    previous_updated: string;
 }
 
 

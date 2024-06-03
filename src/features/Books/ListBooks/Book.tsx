@@ -6,6 +6,7 @@ import YesNoPopup from "@/components/ui/Modal/YesNoPopup";
 import useRemoveBook from "./useRemoveBook";
 import Modal from "@/components/ui/Modal/Modal";
 import EditBookForm from "../EditBook/EditBookForm";
+import { pluralize } from "@/libs/utils/strings";
 
 type Props = {
     book:BookType
@@ -16,11 +17,13 @@ const Book = ({book}:Props)=>{
     const [ showEditForm, setShowEditForm] = useState(false);
 
     const { mutate: removeBook } = useRemoveBook();
-    const {title, description,total_number_of_pages, number_of_pages_read,updated_at,created_at} = book;
+    const {title, description,total_number_of_pages, number_of_pages_read,updated_at,created_at, previous_updated} = book;
     const completionPercentage = ((number_of_pages_read/total_number_of_pages)*100).toFixed(1);
     const handleRemove = ()=>{
       removeBook(book.id);
     }
+
+    const updatedDaysDiff = differenceInDays(previous_updated, updated_at);
     return <div>
         <div className="flex border mb-2 p-3">
           <div className="w-4/5">
@@ -38,7 +41,7 @@ const Book = ({book}:Props)=>{
             </div>
           </div>
           <div className="place-self-center">
-            <p className="text-sm">Last updated: {differenceInDays(updated_at, created_at)} days ago</p>   
+            <p className="text-sm">Last updated: {updatedDaysDiff > 0 ? `${pluralize("day", updatedDaysDiff)} ago` : 'Today' } </p>   
             <p className="text-sm">Added: {format(created_at,'do MMM yyyy')}</p>
           </div>
         </div>
