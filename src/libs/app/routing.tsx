@@ -5,12 +5,15 @@ import Home from '@/features/Home/page';
 import ProtectedRoute from "@/features/Auth/ProtectedRoute";
 import Books from "@/features/Books/page";
 import Register from "@/features/Auth/Register/page";
+import AppBootstrap from '@/libs/app/Bootstrap';
 
 const router = createBrowserRouter([
     {
         path:'/',
         element: (<AuthProvider>
+                   <AppBootstrap>
                     <Outlet />
+                    </AppBootstrap>
                 </AuthProvider>),
         children:[
             {
