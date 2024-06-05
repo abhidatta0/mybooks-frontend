@@ -13,6 +13,9 @@ export type LoginRequest = {
 
 export type LoginResponse = {
     user:LoginUserObject,
+    tokens:{
+        accessToken:string
+    }
 }
 
 export type RegisterRequest = {

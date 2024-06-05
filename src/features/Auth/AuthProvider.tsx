@@ -2,7 +2,6 @@ import { PropsWithChildren, createContext, useContext, useEffect, useState } fro
 import {  LoginUserObject, LoginRequest, LoginResponse, RegisterRequest } from './Login/types';
 import { clearLoginData, getLoginData, saveLoginData } from '@/libs/localstorage/user';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import { cleartoken, gettoken, savetoken } from '@/libs/localstorage/tokens';
 import { fetcherPost } from '@/libs/api/axiosFetcher';
 import domains from '@/libs/api/domains';
@@ -44,14 +43,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       const response = await fetcherPost({ url: UserLoginApi, data: loginRequest });
       console.log(response);
       const loginData: LoginResponse = response.data;
-      console.log(Cookies.get("access-token"));
-      let accessToken = Cookies.get("access-token") ?? '';
-      if(!accessToken){
-        const hasStorageAccess= await document.hasStorageAccess();
-        console.log({hasStorageAccess});
-        await document.requestStorageAccess();
-        accessToken = Cookies.get("access-token") ?? '';
-      }
+      const accessToken = loginData.tokens.accessToken;
       console.log({accessToken});
       if (loginData) {
         // saving to local storage
