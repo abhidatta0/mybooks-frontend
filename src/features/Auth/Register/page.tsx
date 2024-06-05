@@ -23,7 +23,6 @@ const Register = ()=>{
     });
 
     const onSubmit = async (data: RegisterFormInputs) => {
-        console.log(data);
         try {
             await registerUser(data);
         } catch (err) {

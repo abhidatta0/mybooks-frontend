@@ -12,7 +12,6 @@ const useAxiosInterceptor = ()=>{
         response => response,
         async (error)=>{
             const errorMessage = error.response?.data?.message ||  'Something went wrong. Try again!';
-            console.log(error);
             if(error.response.status === 401){
                 toastError("Your session has expired. Please log in again to continue.");
                 return logout();

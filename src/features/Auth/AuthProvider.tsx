@@ -41,10 +41,8 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const loginUser = async (loginRequest: LoginRequest, fromLocation?: Location) => {
     try{
       const response = await fetcherPost({ url: UserLoginApi, data: loginRequest });
-      console.log(response);
       const loginData: LoginResponse = response.data;
       const accessToken = loginData.tokens.accessToken;
-      console.log({accessToken});
       if (loginData) {
         // saving to local storage
         savetoken({ accessToken:accessToken })
@@ -76,7 +74,6 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const registerUser = async (registerRequest: RegisterRequest)=>{
     const response = await fetcherPost({ url: UserRegisterApi, data: registerRequest });
     const data = response.data;
-    console.log(data);
     if(data.success){
       navigate('/login');
     }    

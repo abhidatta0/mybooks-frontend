@@ -24,7 +24,6 @@ const CreateBookForm = ({handleClose}: Props)=>{
     });
 
     const onSubmit  = (data: CreateFormInputs)=>{
-        console.log(data);
         addBook({...data, user_id:id}, {
             onSuccess:handleClose
         })
