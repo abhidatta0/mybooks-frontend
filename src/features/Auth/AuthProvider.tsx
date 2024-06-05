@@ -45,7 +45,14 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       console.log(response);
       const loginData: LoginResponse = response.data;
       console.log(Cookies.get("access-token"));
-      const accessToken = Cookies.get("access-token") ?? '';
+      let accessToken = Cookies.get("access-token") ?? '';
+      if(!accessToken){
+        const hasStorageAccess= await document.hasStorageAccess();
+        console.log({hasStorageAccess});
+        await document.requestStorageAccess();
+        accessToken = Cookies.get("access-token") ?? '';
+      }
+      console.log({accessToken});
       if (loginData) {
         // saving to local storage
         savetoken({ accessToken:accessToken })
