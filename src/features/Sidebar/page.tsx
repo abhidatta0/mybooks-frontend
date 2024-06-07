@@ -1,19 +1,23 @@
 import { PropsWithChildren, useState, createContext, useContext } from 'react';
 import Logo from '@/assets/book-bookmark.svg';
 import { TiChevronLeftOutline } from "react-icons/ti";
+import { IoChevronUp } from "react-icons/io5";
+import { CgProfile } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
 import { TiChevronRight } from "react-icons/ti";
 import Constants from '@/constants/app';
 import { useAuth } from '@/features/Auth/AuthProvider';
 import { useAuthUser } from '@/features/Auth/useAuthUser';
+import TooltipModal from '@/components/ui/Modal/TooltipModal';
 
 type Props = PropsWithChildren;
 const SidebarContext = createContext(false);
 
 const Sidebar = ({children}:Props)=>{
   const [expanded, setExpanded] = useState(true);
-  const {logout} = useAuth();
-  const {username} = useAuthUser();
+  const [showProfileTooltip, setShowProfileTooltip] = useState(false);
+
+  const {username, email} = useAuthUser();
 
   return (
     <aside className="h-screen">
@@ -31,10 +35,21 @@ const Sidebar = ({children}:Props)=>{
         <SidebarContext.Provider value={expanded}>
           <div className='flex flex-1 flex-col px-3 mb-3 justify-between'>
              <ul className=''>{children}</ul>
-             <div className={`btn btn-outline ${expanded ?'': 'btn-sm'}`} onClick={logout}>
-              {expanded ? "Logout" : <IoIosLogOut className='text-red-700' size={15}/>} {expanded ? <p className='mr-2'>({username})</p>: null}
-             </div>
-          </div>
+             <TooltipModal isVisible={showProfileTooltip} tooltipContent={<ProfileTooltipActions />} 
+             parent={(
+              <div className={`border-gray-300 border p-3 rounded hover:bg-gray-200`} onClick={()=>setShowProfileTooltip(true)}>
+                {expanded ? (<div className='flex items-center space-x-2'>
+                  <div>
+                    <p className='text-lg'>{username}</p>
+                    <p className='text-xs font-light'>{email}</p>
+                </div>
+                <IoChevronUp />
+                </div>) : <CgProfile />}
+                </div>
+             )}
+             onBlur={()=> setShowProfileTooltip(false)}
+             />
+        </div>
         </SidebarContext.Provider>
       </nav>
     </aside>
@@ -44,3 +59,14 @@ const Sidebar = ({children}:Props)=>{
 export default Sidebar;
 
 export const useSidebarContext = ()=> useContext(SidebarContext);
+
+const ProfileTooltipActions = ()=>{
+  const {logout} = useAuth();
+
+  return <div>
+    <button className='flex items-center rounded p-1 space-x-2 hover:bg-blue-400 w-full ' onClick={logout}>
+    <IoIosLogOut className='text-red-700' size={20}/>
+    <p className='text-gray-500 text-sm flex-1 text-left hover:text-white'>Sign out</p>
+    </button>
+  </div>
+}
