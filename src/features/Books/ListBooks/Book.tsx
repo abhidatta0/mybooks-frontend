@@ -17,13 +17,13 @@ const Book = ({book}:Props)=>{
     const [ showEditForm, setShowEditForm] = useState(false);
 
     const { mutate: removeBook } = useRemoveBook();
-    const {title, description,total_number_of_pages, number_of_pages_read,updated_at,created_at, previous_updated} = book;
+    const {title, description,total_number_of_pages, number_of_pages_read,updated_at,created_at} = book;
     const completionPercentage = ((number_of_pages_read/total_number_of_pages)*100).toFixed(1);
     const handleRemove = ()=>{
       removeBook(book.id);
     }
 
-    const updatedDaysDiff = differenceInDays(previous_updated, updated_at);
+    const updatedDaysDiff = differenceInDays(new Date(), updated_at);
     return <div>
         <div className="flex border mb-2 p-3">
           <div className="w-4/5">
