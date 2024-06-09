@@ -1,13 +1,15 @@
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
 import {  LoginUserObject, LoginRequest, LoginResponse, RegisterRequest } from './Login/types';
-import { clearLoginData, getLoginData, saveLoginData } from '@/libs/localstorage/user';
 import { useNavigate } from 'react-router-dom';
 import { cleartoken, gettoken, savetoken } from '@/libs/localstorage/tokens';
 import { fetcherPost } from '@/libs/api/axiosFetcher';
 import domains from '@/libs/api/domains';
+import { AxiosError } from 'axios';
+import { toastError } from '@/libs/utils/toast';
 
 const UserLoginApi = `${domains.APP_BACKEND}/users/login`;
 const UserRegisterApi = `${domains.APP_BACKEND}/users`;
+const UserProfileApi = `${domains.APP_BACKEND}/users/profile`;
 
 type AuthContextType = {
   user: LoginUserObject | null;
@@ -28,14 +30,35 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<LoginUserObject | null>(null);
   const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
-    const user = getLoginData();
-    const tokendata = gettoken();
-    if (user && tokendata) {
-      setUser(user);
-      setAccesssToken(tokendata.accessToken);
+  const getUserData = async ()=>{
+    try{
+      const response = await fetcherPost({ url: UserProfileApi});
+      const userData = response.data;
+      setUser(userData);
+    }catch(error){
+      let errorMessage =  'Something went wrong. Try again!';
+      if(error instanceof AxiosError){
+        errorMessage = error.response?.data?.message;
+      }
+      toastError(errorMessage);
+      logout();
     }
-    setIsReady(true);
+    finally{
+      setIsReady(true);
+    }
+  }
+  
+  useEffect(() => {
+    const tokendata = gettoken();
+    if (tokendata) {
+      setAccesssToken(tokendata.accessToken);
+      if(!user){
+        getUserData();
+      }
+    }
+    else{
+      setIsReady(true);
+    }
   }, []);
 
   const loginUser = async (loginRequest: LoginRequest, fromLocation?: Location) => {
@@ -46,7 +69,6 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       if (loginData) {
         // saving to local storage
         savetoken({ accessToken:accessToken })
-        saveLoginData(loginData.user);
   
         // saving in context state
         setUser(loginData.user);
@@ -64,7 +86,6 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   }
 
   const logout = () => {
-    clearLoginData();
     cleartoken();
     setUser(null);
     setAccesssToken(null);
