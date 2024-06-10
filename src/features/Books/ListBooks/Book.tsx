@@ -41,7 +41,7 @@ const Book = ({book}:Props)=>{
             </div>
           </div>
           <div className="place-self-center">
-            <p className="text-sm">Last updated: {updatedDaysDiff > 0 ? `${pluralize("day", updatedDaysDiff)} ago` : 'Today' } </p>   
+            <p className="text-sm">Last updated: {updatedDaysDiff > 0 ? `${updatedDaysDiff} ${pluralize("day", updatedDaysDiff)} ago` : 'Today' } </p>   
             <p className="text-sm">Added: {format(created_at,'do MMM yyyy')}</p>
           </div>
         </div>
