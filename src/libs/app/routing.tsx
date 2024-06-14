@@ -1,20 +1,24 @@
+import {lazy,Suspense} from 'react';
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import Login from '@/features/Auth/Login/page';
 import AuthProvider from '@/features/Auth/AuthProvider';
-import Home from '@/features/Home/page';
 import ProtectedRoute from "@/features/Auth/ProtectedRoute";
-import Books from "@/features/Books/page";
-import Register from "@/features/Auth/Register/page";
 import AppBootstrap from '@/libs/app/Bootstrap';
+
+const Login = lazy(()=> import("@/features/Auth/Login/page"));
+const Books = lazy(()=> import("@/features/Books/page"));
+const Register = lazy(()=> import("@/features/Auth/Register/page"));
+const Home = lazy(()=> import('@/features/Home/page'));
 
 const router = createBrowserRouter([
     {
         path:'/',
-        element: (<AuthProvider>
+        element: (<Suspense fallback={<p>Loading BookHaven...</p>}>
+                <AuthProvider>
                    <AppBootstrap>
                     <Outlet />
                     </AppBootstrap>
-                </AuthProvider>),
+                </AuthProvider>
+                </Suspense>),
         children:[
             {
                 path:'login',
